@@ -101,7 +101,7 @@ const MyView = () => {
 			fileType: fileType,
 		};
 		setMessage("Logging in to Lens ...");
-		await doLogin();
+		if (!isConnected) await doLogin();
 		console.log("login complete profile=", profile);
 
 		setMessage("Uploading metadata to Bundlr ...");
@@ -152,20 +152,32 @@ const MyView = () => {
 					<h1 className="font-display text-7xl text-black">Window</h1>
 					<h2 className="font-display text-3xl text-black">Take A Pic, Click Upload</h2>
 
-					<div className="flex flex-row">
-						<input
-							type="file"
-							onChange={handleFile}
-							className="pl-5 py-2  block text-sm text-white rounded-lg  bg-blue-700"
-							multiple="single"
-							name="files[]"
-						/>
-						<button
-							className="ml-5 bg-blue-700 font-bold py-1 px-3 rounded-lg text-white"
-							onClick={() => onSubmit()}
-						>
-							Post
-						</button>
+					<div className="flex flex-row justify-center">
+						{isConnected && (
+							<>
+								<input
+									type="file"
+									onChange={handleFile}
+									className="pl-5 py-2  block text-sm text-white rounded-lg  bg-blue-700"
+									multiple="single"
+									name="files[]"
+								/>
+								<button
+									className="ml-5 bg-white font-bold py-1 px-3 rounded-lg text-black border border-black border-5"
+									onClick={() => onSubmit()}
+								>
+									Post
+								</button>
+							</>
+						)}
+						{!isConnected && (
+							<button
+								className="mt-5 ml-5 bg-white font-bold py-1 px-3 rounded-lg text-black border border-black border-5"
+								onClick={() => doLogin()}
+							>
+								Login To Lens
+							</button>
+						)}
 					</div>
 					<h3 className="mt-2 font-mono text-sm bg-black text-white">{message}</h3>
 				</div>
