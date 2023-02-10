@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+/* 
+html {
+	width: 100%;
+	height: 100%;
+	background: linear-gradient(180deg, rgba(27, 24, 31, 1) 21.2%, rgba(50, 4, 89, 1) 84.8%);
+	background-attachment: fixed;
+} */
+
+html {
+	background: url(http://localhost:3000/images/cartoon-sky.jpg) no-repeat center center fixed;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+}
