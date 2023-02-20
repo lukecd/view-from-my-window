@@ -14,7 +14,7 @@ const Navbar = () => {
 				<li className="mt-2">
 					<a
 						href="/my-view"
-						className="bg-white  border-2 px-4 py-2 mx-1 font-bold text-black"
+						className="bg-gradient-to-b from-cyan-500 to-blue-500 px-4 py-2 mx-1 font-bold text-white"
 						duration={500}
 					>
 						my view
@@ -23,7 +23,7 @@ const Navbar = () => {
 				<li className="mt-2">
 					<a
 						href="/enjoy-the-view"
-						className="bg-white border-2 px-4 py-2 mx-1 font-bold text-black"
+						className="bg-gradient-to-b from-cyan-500 to-blue-500 px-4 py-2 mx-1 font-bold text-white"
 						duration={500}
 					>
 						enjoy the view
@@ -32,12 +32,23 @@ const Navbar = () => {
 				<li className="mt-2">
 					<a
 						href="/create-profile"
-						className="bg-white border-2 px-4 py-2 mx-1 font-bold text-black"
+						className="bg-gradient-to-b from-cyan-500 to-blue-500 px-4 py-2 mx-1 font-bold text-white"
 						to=""
 						offset={-100}
 						duration={500}
 					>
 						create profile
+					</a>
+				</li>{" "}
+				<li className="mt-2">
+					<a
+						href="/about"
+						className="bg-gradient-to-b from-cyan-500 to-blue-500 px-4 py-2 mx-1 font-bold text-white"
+						to=""
+						offset={-100}
+						duration={500}
+					>
+						about
 					</a>
 				</li>{" "}
 				<li className="self-end"></li>

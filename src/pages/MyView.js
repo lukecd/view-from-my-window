@@ -20,6 +20,7 @@ import {
 } from "@lens-protocol/react";
 import { upload } from "../utils/upload";
 import { fetchSigner } from "wagmi/actions";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 const MyView = () => {
 	const [message, setMessage] = useState("");
@@ -140,20 +141,21 @@ const MyView = () => {
 		}
 	};
 
-	console.log("isConnected=", isConnected);
+	console.log("profile=", profile);
 
 	return (
-		<div name="myView" className="w-full h-screen text-text pt-20">
+		<div name="myView" className="w-full h-screen text-text pt-20 z-1">
 			<div className="flex flex-col items-center justify-center">
-				<Earth className="" width="800" height="813" animate={animate} />
+				<Earth className="z-10" width="800" height="813" animate={animate} />
+
 				<div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
-					<h1 className="font-display text-8xl text-black ">View</h1>
+					<h1 className="font-display text-8xl text-black">View</h1>
 					<h2 className="font-display text-6xl text-black">From My</h2>
 					<h1 className="font-display text-7xl text-black">Window</h1>
 					<h2 className="font-display text-3xl text-black">Take A Pic, Click Upload</h2>
 
 					<div className="flex flex-row justify-center">
-						{isConnected && (
+						{isConnected && profile && (
 							<>
 								<input
 									type="file"
@@ -163,16 +165,17 @@ const MyView = () => {
 									name="files[]"
 								/>
 								<button
-									className="ml-5 bg-white font-bold py-1 px-3 rounded-lg text-black border border-black border-5"
+									className="bg-gradient-to-b from-cyan-500 to-blue-500 px-4 py-2 mx-1 font-bold text-white"
 									onClick={() => onSubmit()}
 								>
 									Post
 								</button>
 							</>
 						)}
-						{!isConnected && (
+						{!isConnected && <ConnectButton />}
+						{!profile && (
 							<button
-								className="mt-5 ml-5 bg-white font-bold py-1 px-3 rounded-lg text-black border border-black border-5"
+								className="bg-gradient-to-b from-cyan-500 to-blue-500 px-4 py-2 mx-1 font-bold text-white"
 								onClick={() => doLogin()}
 							>
 								Login To Lens

@@ -12,6 +12,7 @@ import { LensProvider } from "@lens-protocol/react";
 import { localStorage } from "@lens-protocol/react/web";
 
 import Navbar from "./components/Navbar";
+import SpaceBackground from "./components/SpaceBackground";
 import MyView from "./pages/MyView";
 import EnjoyTheView from "./pages/EnjoyTheView";
 import CreateProfile from "./pages/CreateProfile";
@@ -42,17 +43,20 @@ const lensConfig = {
 export default function App() {
 	return (
 		<WagmiConfig client={wagmiClient}>
-			<LensProvider config={lensConfig}>
-				<Navbar />
-				<BrowserRouter>
-					<Routes>
-						<Route path="/" element={<MyView />} />
-						<Route path="/my-view" element={<MyView />} />
-						<Route path="/enjoy-the-view" element={<EnjoyTheView />} />
-						<Route path="/create-profile" element={<CreateProfile />} />
-					</Routes>
-				</BrowserRouter>
-			</LensProvider>
+			<RainbowKitProvider chains={chains}>
+				<LensProvider config={lensConfig}>
+					<SpaceBackground />
+					<Navbar />
+					<BrowserRouter>
+						<Routes>
+							<Route path="/" element={<MyView />} />
+							<Route path="/my-view" element={<MyView />} />
+							<Route path="/enjoy-the-view" element={<EnjoyTheView />} />
+							<Route path="/create-profile" element={<CreateProfile />} />
+						</Routes>
+					</BrowserRouter>
+				</LensProvider>
+			</RainbowKitProvider>
 		</WagmiConfig>
 	);
 }
