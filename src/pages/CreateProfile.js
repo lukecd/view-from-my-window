@@ -90,6 +90,7 @@ const CreateProfile = () => {
 							<h2 className="font-display text-3xl text-black">
 								Pick A Handle, Click Create
 							</h2>
+							<h2 className="font-display text-xl text-black">** ps, this is on testnet</h2>
 							<div className="flex flex-row ">
 								<input
 									className="w-2/3 px-1 py-1 bg-gradient-to-b from-cyan-500 to-blue-500 border-b text-white text-lg focus:outline-none"

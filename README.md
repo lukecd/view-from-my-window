@@ -8,6 +8,33 @@ My goal with this project is to teach the workshop multiple times, each time usi
 
 I will continue hosting the UI on my site at https://myview.luke.gallery, however as the data exists in Bundlr and on Lens, anyone can build a new UI that pulls from the same dataset. Anyone can add new features, anyone can experiment and take it in new directions.
 
+## Project Overview
+
+This project used the BundlrSDK to handle uploads to Bundlr and the React hooks for Lens to handle uploads to Lens. As we're using the React hooks, we don't have to write any GraphQL ourselves ... it's way easier this way. Way easier.
+
+### Creating A Publication / Post
+
+When working with Lens, social posts are called Publications. To create a Publication you create structured metadata describing the Publication, upload that metadata to Bundlr and then pass the URL of the metadata to a Lens React hook.
+![Project Overview](https://github.com/lukecd/view-from-my-window/blob/main/slides/01-workflow.png?raw=true)
+
+### Uploading To Bundlr
+
+Uploading to Bundlr is super easy, basically 3-4 lines of code.
+
+#### Step 1
+
+You start by connecting to a node. Specify a node address, a currency to pay with a reference to an injected provider. If you're connecting to our Devnet (where you pay with free faucet currencies), you also need to provide a provider URL.
+
+```js
+const bundlr = new WebBundlr("https://node1.bundlr.network", "matic", provider);
+
+const bundlr = new WebBundlr("https://devnet.bundlr.network", "matic", provider, {
+	providerUrl: "https://matic-mumbai.chainstacklabs.com",
+});
+```
+
+![Uploading To Bundlr](https://github.com/lukecd/view-from-my-window/blob/main/slides/02-upload-to-bundlr.png?raw=true)
+
 ## Project Setup
 
 There are two branches in this project
@@ -133,10 +160,6 @@ to this.
    "eject": "react-scripts eject"
 },
 ```
-
-## Project Overview
-
-![alt text](https://github.com/lukecd/view-from-my-window/blob/main/slides/01-workflow.png)
 
 ## Assets Used
 

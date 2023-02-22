@@ -224,7 +224,7 @@ const MyView = () => {
 								className="bg-gradient-to-b from-cyan-500 to-blue-500 px-4 py-2 mx-1 font-bold text-white"
 								onClick={() => doLogin()}
 							>
-								Login To Lens
+								Login To Lens (testnet)
 							</button>
 						)}
 					</div>
