@@ -1,8 +1,4 @@
 import { WebBundlr } from "@bundlr-network/client";
-import { ethers } from "ethers";
-import { useProvider, useSigner } from "wagmi";
-
-import fileReaderStream from "filereader-stream";
 import { fetchSigner } from "wagmi/actions";
 
 const uploadMetadata = async (data) => {
@@ -22,27 +18,14 @@ const uploadMetadata = async (data) => {
 	});
 
 	console.log(`Upload success content URI= https://arweave.net/${tx.id}`);
-	//setMessage("Metadata uploaded ...");
 
 	return `https://arweave.net/${tx.id}`;
 };
 
+// upload metadata automatically created by React hook
 export const upload = async (data) => {
-	console.log("upload function: upload data=", data);
-
-	// data.image = data.content.imageUrl;
-	// data.imageMimeType = data.content.fileType;
-	// data.media = [
-	// 	{
-	// 		item: data.content.imageUrl,
-	// 		type: data.content.fileType,
-	// 	},
-	// ];
-	// // make content null since we have media
-	// data.content = null;
+	// hack to add appid
 	data.appId = "viewfrommywindow";
-	console.log("upload function2: upload data=", data);
-
 	const metadataUrl = await uploadMetadata(data);
 	console.log("metadataUrl=", metadataUrl);
 	return metadataUrl;

@@ -1,18 +1,14 @@
-import React, { useState, useEffect, useRef } from "react";
-import { useProvider, useSigner } from "wagmi";
-
+import React, { useState } from "react";
 import { WebBundlr } from "@bundlr-network/client";
-import { ethers } from "ethers";
-
 import fileReaderStream from "filereader-stream";
 import Earth from "../components/Earth";
+import pica from "pica";
 
 import { useAccount, useConnect, useDisconnect } from "wagmi";
 import { InjectedConnector } from "wagmi/connectors/injected";
 import {
 	ContentFocus,
 	CollectPolicyType,
-	ProfileFragment,
 	ReferencePolicy,
 	useCreatePost,
 	useActiveProfile,
@@ -24,12 +20,8 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 const MyView = () => {
 	const [message, setMessage] = useState("");
-	const [animate, setAnimate] = useState("false");
-	const [address, setAddress] = useState();
-	const [profileId, setProfileId] = useState();
+	const [animate, setAnimate] = useState(false);
 
-	const [token, setToken] = useState();
-	const [imageUrl, setImageUrl] = useState("");
 	const [fileToUpload, setFileToUpload] = useState();
 	const [fileType, setFileType] = useState();
 
@@ -53,6 +45,44 @@ const MyView = () => {
 		setFileType(newFiles[0]["type"]);
 	};
 
+	// Written my Professor ChatGPT :)
+	const compressImage = async (file, maxSize) => {
+		const image = new Image();
+		image.src = URL.createObjectURL(file);
+
+		return new Promise((resolve, reject) => {
+			image.onload = async () => {
+				const canvas = document.createElement("canvas");
+				const width = image.width;
+				const height = image.height;
+
+				if (width > maxSize || height > maxSize) {
+					const scale = Math.min(maxSize / width, maxSize / height);
+					canvas.width = width * scale;
+					canvas.height = height * scale;
+				} else {
+					canvas.width = width;
+					canvas.height = height;
+				}
+
+				const picaInstance = pica();
+				const result = await picaInstance.resize(image, canvas);
+
+				result.toBlob(async (blob) => {
+					const compressedFile = new File([blob], file.name, {
+						type: file.type,
+						lastModified: Date.now(),
+					});
+					resolve(compressedFile);
+				}, file.type);
+			};
+
+			image.onerror = () => {
+				reject(new Error("Failed to load image"));
+			};
+		});
+	};
+
 	const uploadImage = async () => {
 		console.log("uploadImage called ");
 
@@ -60,8 +90,6 @@ const MyView = () => {
 		const provider = signer?.provider;
 
 		setMessage("");
-		// use method injection to add the missing function
-		//provider.getSigner = () => signer; //LUKECD
 		// create a WebBundlr object
 		const bundlr = new WebBundlr("https://devnet.bundlr.network", "matic", provider, {
 			providerUrl: "https://matic-mumbai.chainstacklabs.com",
@@ -70,7 +98,11 @@ const MyView = () => {
 		await bundlr.ready();
 
 		try {
-			const dataStream = fileReaderStream(fileToUpload);
+			console.log("fileToUpload BEFORE =", fileToUpload);
+			const compressedFile = await compressImage(fileToUpload, 600);
+			console.log("fileToUpload AFTER=", compressedFile);
+
+			const dataStream = fileReaderStream(compressedFile);
 			console.log(dataStream.size);
 			const price = await bundlr.getPrice(dataStream.size);
 			const balance = await bundlr.getLoadedBalance();
@@ -95,16 +127,16 @@ const MyView = () => {
 	};
 
 	const onSubmit = async () => {
-		setAnimate("true");
+		setAnimate(true);
+
+		// STEP 1: Upload image
 		const imageUrl = await uploadImage();
 		const content = {
 			imageUrl: imageUrl,
 			fileType: fileType,
 		};
-		setMessage("Logging in to Lens ...");
-		if (!isConnected) await doLogin();
-		console.log("login complete profile=", profile);
 
+		// STEP 2: Create post
 		setMessage("Uploading metadata to Bundlr ...");
 		await create({
 			profileId: profile.id,
@@ -125,10 +157,11 @@ const MyView = () => {
 		});
 
 		setMessage("Post successful ...");
-		setAnimate("false");
+		setAnimate(false);
 	};
 
 	const doLogin = async () => {
+		setAnimate(true);
 		if (isConnected) {
 			await disconnectAsync();
 		}
@@ -139,9 +172,12 @@ const MyView = () => {
 			const signer2 = await connector.getSigner();
 			await login(signer2);
 		}
-	};
 
-	console.log("profile=", profile);
+		if (!profile) {
+			setMessage("You don't appear to have an active profile, create one first.");
+		}
+		setAnimate(false);
+	};
 
 	return (
 		<div name="myView" className="w-full h-screen text-text pt-20 z-1">
@@ -173,7 +209,7 @@ const MyView = () => {
 							</>
 						)}
 						{!isConnected && <ConnectButton />}
-						{!profile && (
+						{isConnected && !profile && (
 							<button
 								className="bg-gradient-to-b from-cyan-500 to-blue-500 px-4 py-2 mx-1 font-bold text-white"
 								onClick={() => doLogin()}

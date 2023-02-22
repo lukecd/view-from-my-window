@@ -9,7 +9,7 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 const CreateProfile = () => {
 	const [message, setMessage] = useState("");
-	const [animate, setAnimate] = useState("false");
+	const [animate, setAnimate] = useState(false);
 
 	const [address, setAddress] = useState();
 
@@ -55,11 +55,11 @@ const CreateProfile = () => {
 			setMessage("You already have a profile associate with your wallet");
 			return;
 		}
-		setAnimate("true");
+		setAnimate(true);
 
 		if (!(await isValidHandle(handle))) {
 			setMessage("Handle format invalid ...");
-			setAnimate("false");
+			setAnimate(false);
 			return;
 		}
 
@@ -73,7 +73,7 @@ const CreateProfile = () => {
 		} catch (err) {
 			setMessage("Error creating profile ... " + err);
 		}
-		setAnimate("false");
+		setAnimate(false);
 	};
 	console.log("profile=", profile);
 

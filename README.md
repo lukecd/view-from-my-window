@@ -134,6 +134,8 @@ to this.
 },
 ```
 
+## Project Overview
+
 ## Assets Used
 
 The following third-party assets and designs were used.
@@ -141,3 +143,22 @@ The following third-party assets and designs were used.
 -   Spinning Earth (purchased)
     https://www.istockphoto.com/vector/earth-globe-map-turning-set-gm864531708-143362339
 -   CSS stars https://www.youtube.com/watch?v=aywzn9cf-_U
+
+## Libraries Used
+
+Image resize
+
+-   https://github.com/nodeca/image-blob-reduce
+-   https://github.com/nodeca/pica
+
+Wagmi hooks
+
+-   https://wagmi.sh/
+
+Lens
+
+-   https://www.lens.xyz/garden
+
+RainbowKit
+
+-   https://www.rainbowkit.com/

@@ -26,7 +26,7 @@ const Earth = (props) => {
 			let localIndex = frameIndex;
 			if (localIndex >= spritePixels.length) localIndex = 0;
 
-			if (props.animate === "false") localIndex = 0;
+			if (props.animate === false) localIndex = 0;
 
 			// clear
 			ctx.clearRect(0, 0, canvasWidth, canvasHeight);
