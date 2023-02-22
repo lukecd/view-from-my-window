@@ -136,6 +136,8 @@ to this.
 
 ## Project Overview
 
+![alt text](https://github.com/lukecd/view-from-my-window/blob/main/slides/01-workflow.png)
+
 ## Assets Used
 
 The following third-party assets and designs were used.
