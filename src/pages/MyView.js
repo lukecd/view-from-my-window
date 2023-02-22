@@ -39,7 +39,17 @@ const MyView = () => {
 	const handleFile = async (e) => {
 		setMessage("");
 		const newFiles = e.target.files;
-		if (newFiles.length === 0) return;
+		console.log(newFiles[0]["type"]);
+
+		if (newFiles.length === 0) {
+			setMessage("Please select a file first");
+			return;
+		}
+
+		// only accept image/png, image/jpeg
+		if (newFiles[0]["type"] !== "image/png" && newFiles[0]["type"] !== "image/jpeg") {
+			setMessage("Please upload a jpeg or a png");
+		}
 
 		setFileToUpload(newFiles[0]);
 		setFileType(newFiles[0]["type"]);

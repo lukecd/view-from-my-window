@@ -14,6 +14,7 @@ import { localStorage } from "@lens-protocol/react/web";
 import Navbar from "./components/Navbar";
 import SpaceBackground from "./components/SpaceBackground";
 import MyView from "./pages/MyView";
+import About from "./pages/About";
 import EnjoyTheView from "./pages/EnjoyTheView";
 import CreateProfile from "./pages/CreateProfile";
 
@@ -33,6 +34,8 @@ const wagmiClient = createClient({
 	provider,
 });
 
+// By adding sources: ["viewfrommywindow"] to the config,
+// I automatically restrict React hook queries to my app only
 const lensConfig = {
 	bindings: wagmiBindings(),
 	environment: staging,
@@ -53,6 +56,7 @@ export default function App() {
 							<Route path="/my-view" element={<MyView />} />
 							<Route path="/enjoy-the-view" element={<EnjoyTheView />} />
 							<Route path="/create-profile" element={<CreateProfile />} />
+							<Route path="/about" element={<About />} />
 						</Routes>
 					</BrowserRouter>
 				</LensProvider>

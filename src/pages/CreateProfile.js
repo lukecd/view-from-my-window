@@ -10,9 +10,6 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 const CreateProfile = () => {
 	const [message, setMessage] = useState("");
 	const [animate, setAnimate] = useState(false);
-
-	const [address, setAddress] = useState();
-
 	const [handle, setHandle] = useState("");
 
 	const { create, error, isPending } = useCreateProfile();
@@ -64,18 +61,14 @@ const CreateProfile = () => {
 		}
 
 		setMessage("Creating profile ...");
-
 		try {
 			await create(handle);
 			setMessage("Profile created ...");
-			console.log("error=", error);
-			console.log("isValidHandle=", isValidHandle);
 		} catch (err) {
 			setMessage("Error creating profile ... " + err);
 		}
 		setAnimate(false);
 	};
-	console.log("profile=", profile);
 
 	return (
 		<div name="createProfile" className="w-full h-screen text-text pt-20">

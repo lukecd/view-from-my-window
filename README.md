@@ -148,7 +148,6 @@ The following third-party assets and designs were used.
 
 Image resize
 
--   https://github.com/nodeca/image-blob-reduce
 -   https://github.com/nodeca/pica
 
 Wagmi hooks
