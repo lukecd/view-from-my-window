@@ -175,7 +175,7 @@ In my implementation, I do two things. First I modify the metadata to include my
 
 The second thing I do is actually upload the metadata.
 
-```js=
+```js
 export const upload = async (data) => {
 	// hack to add appid
 	data.appId = "viewfrommywindow";
@@ -198,7 +198,7 @@ You'll notice on line 6 of the `upload()` function, I end by returning the URL t
 
 ### Wallet Stuff
 
-![Lens Login and Wallet Connect](https://github.com/lukecd/view-from-my-window/blob/main/slides/02-upload-to-bundlr.png?raw=true)
+![Lens Login and Wallet Connect](https://github.com/lukecd/view-from-my-window/blob/main/slides/04-wallet-stuff.png?raw=true)
 
 Before letting someone post a photo, they need to connect their wallet and login to Lens. When you log into Lens, you get back an authentication token that's used in subsequent transactions that involve saving data.
 
@@ -219,17 +219,15 @@ const { login, error, isPending } = useWalletLogin();
 
 ### Creating A Profile
 
-![Creating A Profile](https://github.com/lukecd/view-from-my-window/blob/main/slides/05-create-profile.png?raw=true)
+![Creating A Profile](https://github.com/lukecd/view-from-my-window/blob/main/slides/create-profile.png?raw=true)
 
 All of this code is contained in `pages/CreateProfile.js`.
 
-Ok, you can post images, but only if you're logged in and you can only login if you have a profile ... so how to create a profile.
+Ok, you can post images, but only if you're logged in and you can only login if you have a profile ... so how to create a profile?
 
 On the Lens Mainnet, you have to be whitelisted to create a new profile, so nothing we can do there. BUT on the Mumbai testnet where we're deploying this project, anyone can create as many accounts as they want.
 
-:::note
 Handles created on the testnet are in the form "foo.test", handles created on mainnet are in the form "foo.lens". When passing in a handle to check if valid or create new, only pass the "foo" part, do not include the ".lens" or ".test".
-:::
 
 The `isValidHandle()` React hook returns true if the handle passed is valid.
 
@@ -243,13 +241,15 @@ const { create, error, isPending } = useCreateProfile();
 
 This code is all in `pages/EnjoyTheView.js`.
 
-![Viewing Posts](https://github.com/lukecd/view-from-my-window/blob/main/slides/07-viewing-posts.png?raw=true)
+![Viewing Posts](https://github.com/lukecd/view-from-my-window/blob/main/slides/enjoy-the-view.png?raw=true)
 
-For reading posts, we use the React hook `useExplorePublications()`, which allows you to "explore different publications on Lens Protocol from a variety of people that you may not yet follow". What's interesting is that since we used our app id as an optional parameter when setting up the Lens Provider, all publications exposed will be from our #ViewFromMyWindow app.
+For reading posts, we use the React hook `useExplorePublications()`, which allows you to "explore different publications on Lens Protocol from a variety of people that you may not yet follow". What's interesting is that since we used our app id as an optional parameter when setting up the Lens Provider, all publications exposed will be from our #ViewFromMyWindow app. This is similar to the "explore" tab in Instagram.
 
 ```js
 const { data: publications, loading, hasMore, next } = useExplorePublications();
 ```
+
+There's room here to challenge yourself further and build some more features. You could add the the ability to click through to a profile and see all view posts from that profile. You could add the ability to follow profiles. You could add a second feed page that shows only posts from profiles you follow.
 
 ## Project Setup
 
