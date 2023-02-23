@@ -8,11 +8,13 @@ When I started thinking about a project I could use in some online workshops, I 
 
 My goal with this project is to teach the workshop multiple times, each time using the same code base so that our community of students grows and we each keep sharing our views.
 
-I will continue hosting the UI on my site at https://myview.luke.gallery, however as the data exists in Bundlr and on Lens, anyone can build a new UI that pulls from the same dataset. Anyone can add new features, anyone can experiment and take it in new directions.
+I will continue hosting the UI on my site at https://myview.luke.gallery, however as the data exists in [Bundlr](https://bundlr.network) and on [Lens,](htts://lens.xyz) anyone can build a new UI that pulls from the same dataset. Anyone can add new features, anyone can experiment and take it in new directions.
+
+What follows is a mini-tutorial, a written guide designed to accompany my physical presentations. The guide is very focused and covers using Bundlr and using Lens. It intentionally skips over React basics, Tailwind basics, and all that jazz.
 
 ## Project Overview
 
-This project used the BundlrSDK to handle uploads to Bundlr and the React hooks for Lens to handle uploads to Lens. As we're using the React hooks, we don't have to write any GraphQL ourselves ... it's way easier this way. Way easier.
+This project uses the [Bundlr SDK](https://www.youtube.com/watch?v=Wxfyd0veaEc) to handle uploads to Bundlr and the [React hooks for Lens](https://docs.lens.xyz/docs/sdk-react-intro) to handle uploads to Lens. As we're using the React hooks, we don't have to write any GraphQL ourselves ... it's way easier this way. Way easier.
 
 ### App.js Setup
 
@@ -22,9 +24,9 @@ When working with React, the provider pattern allows you to easily share data be
 -   RainbowKit: For wallet connect
 -   Lens: For lens functionality
 
-All of our interactions with Lens will be via the React hooks and by wrapping our main parent components with the Lens provider, all of those React hooks will have the right configuration options.
+All of our interactions with Lens will be via the React hooks, and by wrapping our main parent components with the Lens provider, all of those React hooks will have the right configuration options.
 
-All three providers are configured using these values
+All three providers are configured using these values:
 
 ```js
 const { chains, provider, webSocketProvider } = configureChains(
@@ -53,7 +55,7 @@ const lensConfig = {
 };
 ```
 
-And then we wrap our components in the providers as follows.
+And then we wrap our components in the providers as follows:
 
 ```js
 export default function App() {
@@ -76,7 +78,7 @@ export default function App() {
 ![Project Overview](https://github.com/lukecd/view-from-my-window/blob/main/slides/01-workflow.png?raw=true)
 When working with Lens, social posts are called Publications. To create a Publication you create structured metadata describing the Publication, upload that metadata to Bundlr and then pass the URL of the metadata to a Lens React hook.
 
-Since we're doing image posts, there's one extra step. Before uploading the metadata to Bundlr, you need to upload the image to Bundlr and then embed the image URL in the post metadata. So for image Publications (Posts), you n+1 uploads to Bundlr, where n is the number of images used in the post.
+Since we're doing image posts, there's one extra step. Before uploading the metadata to Bundlr, you need to upload the image to Bundlr and then embed the image URL in the post metadata. So for image Publications (Posts), you'll require n+1 uploads to Bundlr, where n is the number of images used in the post.
 
 Most of this code is in the file `Pages/MyView.js`.
 
@@ -88,7 +90,7 @@ Uploading to Bundlr is super easy, basically 3-4 lines of code.
 
 #### Step 1: Connect To A Node
 
-You start by connecting to a node. Specify a node address, a currency to pay with a reference to an injected provider. If you're connecting to our Devnet (where you pay with free faucet currencies), you also need to provide a provider URL.
+You start by connecting to a node. Specify a node address, a currency to pay, and a reference to an injected provider. If you're connecting to our Devnet (where you pay with free faucet currencies), you also need to provide a provider URL.
 
 ```js
 const bundlr = new WebBundlr("https://node1.bundlr.network", "matic", provider);
@@ -115,7 +117,7 @@ if (price > balance) {
 
 #### Step 3: Upload Data
 
-Finally, we upload. Bundlr supports [adding custom metadata](https://docs.bundlr.network/sdk/tags) to any upload, you can use for any custom use-case your app might have. In the case of images you wanted to be rendered by a browser, you will need to set the Content-Type MIME type tag.
+Finally, we upload. Bundlr supports [adding custom metadata](https://docs.bundlr.network/sdk/tags) to any upload, a feature that supports a variety of different use-cases. In the case of images you wanted to be rendered by a browser, you must to set the Content-Type MIME type tag.
 
 ```js
 const tx = await bundlr.upload(dataStream, {
@@ -131,7 +133,7 @@ console.log(`File uploaded ==> https://arweave.net/${tx.id}`);
 
 Once the image is uploaded, we need to create the post metadata and upload that to Bundlr. This is done using the `useCreatePost()` React hook. There's a couple of interesting things happening here.
 
-It exposes a function called `create()` that is handles creating the actual metadata for you. Also, it's passed another function called `upload()` that you have to implement.
+It exposes a function called `create()` that handles creating the actual metadata for you. Also, it's passed another function called `upload()` that you have to implement.
 
 ```js
 const { create, error, isPending } = useCreatePost({ profile, upload });
@@ -169,11 +171,11 @@ export const upload = (data: unknown): Promise<string> => {
 }
 ```
 
-In my implementation, I do two things. First I modify the metadata to include my custom app id. This is a bit hacky, but it's needed right now as the `create()` function doesn't allow for passing an app id. FWIU, it's going to be added in a future release.
+In my implementation, I do two things. First I modify the metadata to include my custom app id. This is a bit hacky, but it's needed right now as the `create()` function doesn't allow for passing an app id. (It's going to be added in a future release.)
 
 The second thing I do is actually upload the metadata.
 
-```js showLineNumbers
+```js=
 export const upload = async (data) => {
 	// hack to add appid
 	data.appId = "viewfrommywindow";
@@ -183,7 +185,7 @@ export const upload = async (data) => {
 };
 ```
 
-There's no need to show the whole `uploadMetadata()` function here, as it's basically the same as what I do when uploading the image, but it's worth calling out that you must use the `Content-Type` MIME type to specify that the file is `json` data. If you leave that out,things won't work right when passing the metadata URL to Lens.
+There's no need to show the whole `uploadMetadata()` function here, as it's basically the same as what I do when uploading the image, but it's worth calling out that you must use the `Content-Type` MIME type to specify that the file is `json` data. If you leave that out, things won't work right when passing the metadata URL to Lens.
 
 ```js
 const serialized = JSON.stringify(data);
