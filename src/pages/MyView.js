@@ -108,12 +108,10 @@ const MyView = () => {
 		await bundlr.ready();
 
 		try {
-			console.log("fileToUpload BEFORE =", fileToUpload);
+			// compress the image to a max width of 600px
 			const compressedFile = await compressImage(fileToUpload, 600);
-			console.log("fileToUpload AFTER=", compressedFile);
 
 			const dataStream = fileReaderStream(compressedFile);
-			console.log(dataStream.size);
 			const price = await bundlr.getPrice(dataStream.size);
 			const balance = await bundlr.getLoadedBalance();
 			if (price > balance) {
