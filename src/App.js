@@ -18,22 +18,6 @@ import About from "./pages/About";
 import EnjoyTheView from "./pages/EnjoyTheView";
 import CreateProfile from "./pages/CreateProfile";
 
-const { chains, provider, webSocketProvider } = configureChains(
-	[polygonMumbai, polygon],
-	[publicProvider()],
-);
-
-const { connectors } = getDefaultWallets({
-	appName: "View From My Window",
-	chains,
-});
-
-const wagmiClient = createClient({
-	autoConnect: true,
-	connectors,
-	provider,
-});
-
 // By adding sources: ["viewfrommywindow"] to the config,
 // I automatically restrict React hook queries to my app only
 const lensConfig = {
@@ -45,22 +29,18 @@ const lensConfig = {
 
 export default function App() {
 	return (
-		<WagmiConfig client={wagmiClient}>
-			<RainbowKitProvider chains={chains}>
-				<LensProvider config={lensConfig}>
-					<SpaceBackground />
-					<Navbar />
-					<BrowserRouter>
-						<Routes>
-							<Route path="/" element={<MyView />} />
-							<Route path="/my-view" element={<MyView />} />
-							<Route path="/enjoy-the-view" element={<EnjoyTheView />} />
-							<Route path="/create-profile" element={<CreateProfile />} />
-							<Route path="/about" element={<About />} />
-						</Routes>
-					</BrowserRouter>
-				</LensProvider>
-			</RainbowKitProvider>
-		</WagmiConfig>
+		<>
+			<SpaceBackground />
+			<Navbar />
+			<BrowserRouter>
+				<Routes>
+					<Route path="/" element={<MyView />} />
+					<Route path="/my-view" element={<MyView />} />
+					<Route path="/enjoy-the-view" element={<EnjoyTheView />} />
+					<Route path="/create-profile" element={<CreateProfile />} />
+					<Route path="/about" element={<About />} />
+				</Routes>
+			</BrowserRouter>
+		</>
 	);
 }

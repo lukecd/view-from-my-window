@@ -93,76 +93,15 @@ const MyView = () => {
 		});
 	};
 
-	const uploadImage = async () => {
-		console.log("uploadImage called ");
-
-		const signer = await fetchSigner();
-		const provider = signer?.provider;
-
-		setMessage("");
-		// create a WebBundlr object
-		const bundlr = new WebBundlr("https://devnet.bundlr.network", "matic", provider, {
-			providerUrl: "https://matic-mumbai.chainstacklabs.com",
-		});
-
-		await bundlr.ready();
-
-		try {
-			// compress the image to a max width of 600px
-			const compressedFile = await compressImage(fileToUpload, 600);
-
-			const dataStream = fileReaderStream(compressedFile);
-			const price = await bundlr.getPrice(dataStream.size);
-			const balance = await bundlr.getLoadedBalance();
-			if (price > balance) {
-				setMessage(`Funding Upload ....`);
-				await bundlr.fund(price);
-			}
-
-			setMessage(`Uploading File To Bundlr ....`);
-			const tx = await bundlr.upload(dataStream, {
-				tags: [{ name: "Content-Type", value: fileType }],
-			});
-
-			console.log(`File uploaded ==> https://arweave.net/${tx.id}`);
-			setMessage(`File Uploaded ...`);
-
-			return "https://arweave.net/" + tx.id;
-		} catch (e) {
-			setMessage("Upload error " + e.message);
-			console.log("error on upload, ", e);
-		}
-	};
+	const uploadImage = async () => {};
 
 	const onSubmit = async () => {
 		setAnimate(true);
 
 		// STEP 1: Upload image
-		const imageUrl = await uploadImage();
-		const content = {
-			imageUrl: imageUrl,
-			fileType: fileType,
-		};
 
 		// STEP 2: Create post
 		setMessage("Uploading metadata to Bundlr ...");
-		await create({
-			profileId: profile.id,
-			image: imageUrl,
-			imageMimeType: fileType,
-			contentFocus: ContentFocus.IMAGE,
-			locale: "en",
-			collect: {
-				type: CollectPolicyType.NO_COLLECT,
-			},
-			reference: ReferencePolicy.ANYBODY,
-			media: [
-				{
-					url: imageUrl,
-					mimeType: fileType,
-				},
-			],
-		});
 
 		setMessage("Post successful ...");
 		setAnimate(false);
@@ -170,20 +109,7 @@ const MyView = () => {
 
 	const doLogin = async () => {
 		setAnimate(true);
-		if (isConnected) {
-			await disconnectAsync();
-		}
 
-		const { connector } = await connectAsync();
-
-		if (connector instanceof InjectedConnector) {
-			const signer2 = await connector.getSigner();
-			await login(signer2);
-		}
-
-		if (!profile) {
-			setMessage("You don't appear to have an active profile, create one first.");
-		}
 		setAnimate(false);
 	};
 

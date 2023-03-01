@@ -24,51 +24,9 @@ const CreateProfile = () => {
 		connector: new InjectedConnector(),
 	});
 
-	const doLogin = async () => {
-		// only login if needed
-		if (isConnected) {
-			//return;
-			await disconnectAsync();
-		}
+	const doLogin = async () => {};
 
-		const { connector } = await connectAsync();
-
-		if (connector instanceof InjectedConnector) {
-			const signer = await connector.getSigner();
-			await login(signer);
-		}
-	};
-
-	const createProfile = async (e) => {
-		if (!handle) {
-			setMessage("Pick a handle first");
-			return;
-		}
-
-		setMessage("Getting access token ...");
-		await doLogin();
-
-		if (profile) {
-			setMessage("You already have a profile associate with your wallet");
-			return;
-		}
-		setAnimate(true);
-
-		if (!(await isValidHandle(handle))) {
-			setMessage("Handle format invalid ...");
-			setAnimate(false);
-			return;
-		}
-
-		setMessage("Creating profile ...");
-		try {
-			await create(handle);
-			setMessage("Profile created ...");
-		} catch (err) {
-			setMessage("Error creating profile ... " + err);
-		}
-		setAnimate(false);
-	};
+	const createProfile = async (e) => {};
 
 	return (
 		<div name="createProfile" className="w-full h-screen text-text pt-20">
